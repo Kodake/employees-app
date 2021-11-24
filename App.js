@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   titulo: {
     color: '#FFF',
-    marginTop: Platform.OS === 'ios' ? 40 : 70,
+    marginTop: Platform.OS === 'ios' ? 40 : 20,
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
