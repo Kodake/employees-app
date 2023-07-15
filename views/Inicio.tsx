@@ -19,6 +19,14 @@ const Inicio: React.FC<Props> = observer(({ navigation }) => {
     navigation.navigate('NuevoCliente');
   }
 
+  const handleFetchCliente = async (id?: number) => {
+    if (id) {
+      await store.fetchClienteById(id);
+      store.clearCliente();
+      navigation.navigate('DetallesCliente');
+    }
+  };
+
   return (
     <View style={globalStyles.contenedor}>
       <Button
@@ -41,7 +49,7 @@ const Inicio: React.FC<Props> = observer(({ navigation }) => {
           <List.Item
             title={item.nombre}
             description={item.empresa}
-          // onPress={() => handleFetchCliente(item.id.toString())}
+            onPress={() => handleFetchCliente(item.id)}
           />
         )}
       />

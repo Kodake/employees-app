@@ -21,12 +21,7 @@ export async function initDatabase() {
   // db.close();
 }
 
-export const insertCliente = (db: SQLiteDatabase, cliente: NewCliente) => {
-  const insertQuery = `INSERT INTO CLIENTES (nombre, telefono, correo, empresa) values ('${cliente.nombre}', '${cliente.telefono}', '${cliente.correo}', '${cliente.empresa}')`;
-  return db.executeSql(insertQuery);
-}
-
-export async function selectClientes(db: SQLiteDatabase) {
+export const selectClientes = async (db: SQLiteDatabase) => {
   const clientes: Cliente[] = [];
   const selectQuery = `SELECT id, nombre, telefono, correo, empresa FROM CLIENTES`;
   const results = await db.executeSql(selectQuery);
@@ -38,4 +33,42 @@ export async function selectClientes(db: SQLiteDatabase) {
   });
 
   return clientes;
+}
+
+export const selectClienteById = async (db: SQLiteDatabase, id: number) => {
+  let cliente: Cliente | null = null;
+  const selectQuery = `SELECT id, nombre, telefono, correo, empresa FROM CLIENTES WHERE id = ?`;
+  const results = await db.executeSql(selectQuery, [id]);
+
+  if (results.length > 0 && results[0].rows.length > 0) {
+    cliente = results[0].rows.item(0);
+    return cliente;
+  }
+
+  return null;
+}
+
+export const insertCliente = async (db: SQLiteDatabase, cliente: NewCliente) => {
+  const insertQuery = `
+    INSERT INTO CLIENTES (nombre, telefono, correo, empresa)
+    VALUES (?, ?, ?, ?)
+  `;
+  const { nombre, telefono, correo, empresa } = cliente;
+  await db.executeSql(insertQuery, [nombre, telefono, correo, empresa]);
+}
+
+export const updateCliente = async (db: SQLiteDatabase, cliente: Cliente) => {
+  const updateQuery = `
+    UPDATE CLIENTES
+    SET nombre = ?, telefono = ?, correo = ?, empresa = ?
+    WHERE id = ?
+  `;
+  const { id, nombre, telefono, correo, empresa } = cliente;
+  await db.executeSql(updateQuery, [nombre, telefono, correo, empresa, id]);
+}
+
+
+export const deleteClienteById = async (db: SQLiteDatabase, id: number) => {
+  const deleteQuery = `DELETE FROM CLIENTES WHERE id = ?`;
+  await db.executeSql(deleteQuery, [id]);
 }

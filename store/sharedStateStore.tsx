@@ -3,16 +3,25 @@ import { Cliente, NewCliente } from "../interfaces/appInterfaces";
 import * as yup from 'yup';
 import { Alert } from "react-native";
 import { VALIDATION_STRINGS } from "../messages/appMessages";
-import { getDbConnection, initDatabase, insertCliente, selectClientes } from "../db/database";
+import {
+    getDbConnection,
+    initDatabase,
+    insertCliente,
+    selectClienteById,
+    selectClientes,
+    deleteClienteById,
+    updateCliente
+} from "../db/database";
 
 class SharedStateStore {
+    idCliente = 0;
     nombre = '';
     telefono = '';
     correo = '';
     empresa = '';
     alerta = false;
     cliente: NewCliente | undefined;
-    clienteById: Cliente | undefined;
+    clienteById: Cliente | null = null;
     clientes: Cliente[] = [];
     consultarAPI: boolean = false;
     isSaved: boolean = false;
@@ -23,10 +32,15 @@ class SharedStateStore {
     }
 
     clearCliente() {
+        this.setIdCliente(0);
         this.setNombre('');
         this.setTelefono('');
         this.setCorreo('');
         this.setEmpresa('');
+    }
+
+    setIdCliente(id: number) {
+        this.idCliente = id;
     }
 
     setNombre(nombre: string) {
@@ -57,7 +71,7 @@ class SharedStateStore {
         this.cliente = cliente
     }
 
-    setClienteById(cliente: Cliente): void {
+    setClienteById(cliente: Cliente | null): void {
         this.clienteById = cliente
     }
 
@@ -109,12 +123,27 @@ class SharedStateStore {
     }
 
     fetchClientes = async () => {
-        const db = await getDbConnection();
-        const clientes = await selectClientes(db);
+        try {
+            const db = await getDbConnection();
+            const clientes = await selectClientes(db);
+            runInAction(() => {
+                this.setClientes(clientes);
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
-        runInAction(() => {
-            this.setClientes(clientes);
-        });
+    fetchClienteById = async (id: number) => {
+        try {
+            const db = await getDbConnection();
+            const cliente = await selectClienteById(db, id);
+            runInAction(() => {
+                return this.setClienteById(cliente);
+            });
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     saveCliente = async () => {
@@ -133,13 +162,52 @@ class SharedStateStore {
         try {
             const db = await getDbConnection();
             await insertCliente(db, newCliente);
+            runInAction(() => {
+                this.setIsSaved(true);
+                this.fetchClientes();
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
+    updateCliente = async(id: number) => {
+        if (!this.validateCliente() || !id) {
+            this.setIsSaved(false);
+            return;
+        }
+
+        const updatedCliente = {
+            id: id,
+            nombre: this.nombre,
+            telefono: this.telefono,
+            correo: this.correo,
+            empresa: this.empresa
+        };
+
+        try {
+            const db = await getDbConnection();
+            await updateCliente(db, updatedCliente);
             runInAction(() => {
                 this.setIsSaved(true);
                 this.fetchClientes();
             });
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    deleteClienteById = async (id: number) => {
+        try {
+            if (!id) return;
+
+            const db = await getDbConnection();
+            await deleteClienteById(db, id);
+            runInAction(() => {
+                this.fetchClientes();
+            });
+        } catch (error) {
+            console.error(error);
         }
     }
 }

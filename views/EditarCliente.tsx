@@ -12,6 +12,7 @@ const EditarCliente: React.FC<Props> = observer(({ navigation }) => {
   
   useEffect(() => {
     if (store.clienteById) {
+      store.setIdCliente(store.clienteById.id || 0);
       store.setNombre(store.clienteById.nombre || '');
       store.setTelefono(store.clienteById.telefono || '');
       store.setCorreo(store.clienteById.correo || '');
@@ -19,13 +20,14 @@ const EditarCliente: React.FC<Props> = observer(({ navigation }) => {
     }
   }, [store.clienteById]);
 
-  const handleUpdateCliente = async (id?: string) => {
+  const handleUpdateCliente = async (id?: number) => {
+    store.setIdCliente(store.idCliente)
     store.setNombre(store.nombre);
     store.setTelefono(store.telefono);
     store.setCorreo(store.correo);
     store.setEmpresa(store.empresa);
 
-    // await store.updateCliente(id);
+    await store.updateCliente(id!);
     if (store.isSaved) {
       store.clearCliente();
       navigation.navigate('Inicio');
@@ -72,7 +74,7 @@ const EditarCliente: React.FC<Props> = observer(({ navigation }) => {
         style={styles.boton}
         icon="content-save"
         mode="contained"
-        onPress={() => handleUpdateCliente(store.clienteById?.id?.toString())}
+        onPress={() => handleUpdateCliente(store.clienteById?.id)}
       >
         {CLIENT_STRINGS.updateClient}
       </Button>

@@ -14,22 +14,22 @@ const DetallesCliente: React.FC<Props> = ({ navigation }) => {
       CONFIRMATION_MESSAGES.deleteConfirmation,
       CONFIRMATION_MESSAGES.deleteConfirmationDescription,
       [
-        { text: CONFIRMATION_MESSAGES.deleteConfirmationYes, onPress: () => handleDeleteCliente(store.clienteById?.id.toString()) },
+        { text: CONFIRMATION_MESSAGES.deleteConfirmationYes, onPress: () => handleDeleteCliente(store.clienteById?.id) },
         { text: CONFIRMATION_MESSAGES.deleteConfirmationCancel, style: 'cancel' },
       ],
     );
   };
 
-  const handleDeleteCliente = async (id?: string) => {
+  const handleDeleteCliente = async (id?: number) => {
     if (id) {
-      // await store.deleteClienteById(id);
+      await store.deleteClienteById(id);
       navigation.navigate('Inicio');
     }
   };
 
-  const handleFetchCliente = async (id?: string) => {
+  const handleFetchCliente = async (id?: number) => {
     if (id) {
-      // await store.fetchClienteById(id);
+      await store.fetchClienteById(id);
       navigation.navigate('EditarCliente');
     }
   };
@@ -59,7 +59,7 @@ const DetallesCliente: React.FC<Props> = ({ navigation }) => {
         color='white'
         icon="pencil"
         style={globalStyles.fab}
-        onPress={() => handleFetchCliente(store.clienteById?.id.toString())}
+        onPress={() => handleFetchCliente(store.clienteById?.id)}
       />
     </View>
   );
