@@ -10,7 +10,8 @@ import {
     selectClienteById,
     selectClientes,
     deleteClienteById,
-    updateCliente
+    updateCliente,
+    validateExistingCorreo
 } from "../db/database";
 
 class SharedStateStore {
@@ -122,6 +123,15 @@ class SharedStateStore {
         }
     }
 
+    validateExistingCorreo = async (correo: string) => {
+        try {
+            const db = await getDbConnection();
+            return await validateExistingCorreo(db, correo);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     fetchClientes = async () => {
         try {
             const db = await getDbConnection();
@@ -161,6 +171,14 @@ class SharedStateStore {
 
         try {
             const db = await getDbConnection();
+            const correoExists = await validateExistingCorreo(db, newCliente.correo);
+
+            if (correoExists) {
+                Alert.alert(VALIDATION_STRINGS.validationError, VALIDATION_STRINGS.correoExists);
+                this.setIsSaved(false);
+                return;
+            }
+
             await insertCliente(db, newCliente);
             runInAction(() => {
                 this.setIsSaved(true);
@@ -171,7 +189,7 @@ class SharedStateStore {
         }
     }
 
-    updateCliente = async(id: number) => {
+    updateCliente = async (id: number) => {
         if (!this.validateCliente() || !id) {
             this.setIsSaved(false);
             return;
@@ -187,6 +205,14 @@ class SharedStateStore {
 
         try {
             const db = await getDbConnection();
+            this.setIsSaved(false);
+            const existingCliente = await validateExistingCorreo(db, updatedCliente.correo);
+
+            if (existingCliente && existingCliente.id !== id) {
+                Alert.alert(VALIDATION_STRINGS.validationError, VALIDATION_STRINGS.correoExistsForAnotherCliente);
+                return;
+            }
+
             await updateCliente(db, updatedCliente);
             runInAction(() => {
                 this.setIsSaved(true);

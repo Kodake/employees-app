@@ -20,6 +20,8 @@ export const CLIENT_STRINGS = {
 
 export const VALIDATION_STRINGS = {
     validationError: 'Error de validación',
+    correoExists: 'El correo ya existe',
+    correoExistsForAnotherCliente: 'El correo ya existe para otro cliente',
     nombreRequired: 'El nombre es obligatorio',
     nombreMinLength: 'El nombre debe tener al menos 2 caracteres',
     nombreMaxLength: 'El nombre puede tener como máximo 50 caracteres',

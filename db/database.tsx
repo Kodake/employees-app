@@ -21,6 +21,18 @@ export async function initDatabase() {
   // db.close();
 }
 
+export const validateExistingCorreo = async (db: SQLiteDatabase, correo: string): Promise<Cliente | null> => {
+  const selectQuery = `SELECT id, nombre, telefono, correo, empresa FROM CLIENTES WHERE correo = ?`;
+  const results = await db.executeSql(selectQuery, [correo]);
+
+  if (results.length > 0 && results[0].rows.length > 0) {
+    return results[0].rows.item(0);
+  }
+
+  return null;
+}
+
+
 export const selectClientes = async (db: SQLiteDatabase) => {
   const clientes: Cliente[] = [];
   const selectQuery = `SELECT id, nombre, telefono, correo, empresa FROM CLIENTES`;
