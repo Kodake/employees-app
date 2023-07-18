@@ -120,6 +120,7 @@ class SharedStateStore {
                 pressAction: {
                     id: 'default',
                 },
+                actions: []
             },
         });
     };
