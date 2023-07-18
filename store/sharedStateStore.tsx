@@ -1,8 +1,9 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import notifee from '@notifee/react-native';
 import { Cliente, NewCliente } from "../interfaces/appInterfaces";
 import * as yup from 'yup';
 import { Alert } from "react-native";
-import { VALIDATION_STRINGS } from "../messages/appMessages";
+import { NOTIFICATION_STRINGS, VALIDATION_STRINGS } from "../messages/appMessages";
 import {
     getDbConnection,
     initDatabase,
@@ -102,6 +103,27 @@ class SharedStateStore {
             .max(100, VALIDATION_STRINGS.empresaMaxLength),
     });
 
+    displayNotification = async (title: string, body: string) => {
+        await notifee.requestPermission();
+
+        const channelId = await notifee.createChannel({
+            id: NOTIFICATION_STRINGS.notificationChannel,
+            name: NOTIFICATION_STRINGS.notificationChannelName,
+        });
+
+        await notifee.displayNotification({
+            title: title,
+            body: body,
+            android: {
+                channelId,
+                smallIcon: 'ic_launcher',
+                pressAction: {
+                    id: 'default',
+                },
+            },
+        });
+    };
+
     validateCliente() {
         const cliente = {
             nombre: this.nombre,
@@ -179,7 +201,13 @@ class SharedStateStore {
                 return;
             }
 
+
             await insertCliente(db, newCliente);
+
+            await this.displayNotification(
+                NOTIFICATION_STRINGS.notificationTitle,
+                NOTIFICATION_STRINGS.notificationBodyOnSave
+            );
             runInAction(() => {
                 this.setIsSaved(true);
                 this.fetchClientes();
@@ -213,7 +241,13 @@ class SharedStateStore {
                 return;
             }
 
+
             await updateCliente(db, updatedCliente);
+
+            await this.displayNotification(
+                NOTIFICATION_STRINGS.notificationTitle,
+                NOTIFICATION_STRINGS.notificationBodyOnUpdate
+            );
             runInAction(() => {
                 this.setIsSaved(true);
                 this.fetchClientes();
@@ -229,6 +263,11 @@ class SharedStateStore {
 
             const db = await getDbConnection();
             await deleteClienteById(db, id);
+
+            await this.displayNotification(
+                NOTIFICATION_STRINGS.notificationTitle,
+                NOTIFICATION_STRINGS.notificationBodyOnDelete
+            );
             runInAction(() => {
                 this.fetchClientes();
             });

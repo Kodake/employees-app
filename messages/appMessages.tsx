@@ -41,3 +41,12 @@ export const CONFIRMATION_MESSAGES = {
     deleteConfirmationYes: 'Si, eliminar',
     deleteConfirmationCancel: 'Cancelar',
 };
+
+export const NOTIFICATION_STRINGS = {
+    notificationChannel: 'default',
+    notificationChannelName: 'default channel',
+    notificationTitle: 'Appointment App',
+    notificationBodyOnSave: '¡Cliente agregado satisfactoriamente!',
+    notificationBodyOnUpdate: '¡Cliente actualizado satisfactoriamente!',
+    notificationBodyOnDelete: '¡Cliente eliminado satisfactoriamente!'
+};
