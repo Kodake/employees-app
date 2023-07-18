@@ -45,19 +45,19 @@ class SharedStateStore {
     }
 
     setNombre(nombre: string) {
-        this.nombre = nombre;
+        this.nombre = nombre.trim().toUpperCase();
     }
 
     setTelefono(telefono: string) {
-        this.telefono = telefono;
+        this.telefono = telefono.trim().toUpperCase();
     }
 
     setCorreo(correo: string) {
-        this.correo = correo;
+        this.correo = correo.trim().toUpperCase();
     }
 
     setEmpresa(empresa: string) {
-        this.empresa = empresa;
+        this.empresa = empresa.trim().toUpperCase();
     }
 
     setAlerta(alerta: boolean) {
