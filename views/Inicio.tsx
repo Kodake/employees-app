@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FlatList, View } from 'react-native';
 import { List, Headline, Button, FAB } from 'react-native-paper';
 import globalStyles from '../styles/global';
-import { styles } from './InicioStyles';
+import { styles } from '../styles/InicioStyles';
 import { observer } from 'mobx-react';
 import store from '../store/sharedStateStore';
 import { Cliente, Props } from '../interfaces/appInterfaces';

@@ -6,7 +6,7 @@ import {
   Button
 } from 'react-native-paper';
 import globalStyles from '../styles/global';
-import { styles } from './NuevoClienteStyles';
+import { styles } from '../styles/NuevoClienteStyles';
 import store from '../store/sharedStateStore';
 import { observer } from 'mobx-react';
 import { Props } from '../interfaces/appInterfaces';

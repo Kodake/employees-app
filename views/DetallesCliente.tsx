@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Alert } from 'react-native';
 import { Headline, Text, Subheading, Button, FAB } from 'react-native-paper';
 import globalStyles from '../styles/global';
-import { styles } from './DetallesClienteStyles';
+import { styles } from '../styles/DetallesClienteStyles';
 import store from '../store/sharedStateStore';
 import { Props } from '../interfaces/appInterfaces';
 import { CLIENT_STRINGS, CONFIRMATION_MESSAGES } from '../messages/appMessages';
