@@ -18,7 +18,6 @@ export async function createTables(db: SQLiteDatabase | null) {
 export async function initDatabase() {
   const db = await getDbConnection();
   await createTables(db);
-  // db.close();
 }
 
 export const validateExistingCorreo = async (db: SQLiteDatabase, correo: string): Promise<Cliente | null> => {
