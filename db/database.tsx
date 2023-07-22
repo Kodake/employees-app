@@ -31,7 +31,6 @@ export const validateExistingCorreo = async (db: SQLiteDatabase, correo: string)
   return null;
 }
 
-
 export const selectClientes = async (db: SQLiteDatabase) => {
   const clientes: Cliente[] = [];
   const selectQuery = `SELECT id, nombre, telefono, correo, empresa FROM CLIENTES`;
@@ -77,7 +76,6 @@ export const updateCliente = async (db: SQLiteDatabase, cliente: Cliente) => {
   const { id, nombre, telefono, correo, empresa } = cliente;
   await db.executeSql(updateQuery, [nombre, telefono, correo, empresa, id]);
 }
-
 
 export const deleteClienteById = async (db: SQLiteDatabase, id: number) => {
   const deleteQuery = `DELETE FROM CLIENTES WHERE id = ?`;
