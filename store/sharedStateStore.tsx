@@ -202,7 +202,6 @@ class SharedStateStore {
                 return;
             }
 
-
             await insertCliente(db, newCliente);
 
             await this.displayNotification(
@@ -241,7 +240,6 @@ class SharedStateStore {
                 Alert.alert(VALIDATION_STRINGS.validationError, VALIDATION_STRINGS.correoExistsForAnotherCliente);
                 return;
             }
-
 
             await updateCliente(db, updatedCliente);
 
