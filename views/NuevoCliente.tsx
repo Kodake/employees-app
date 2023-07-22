@@ -14,16 +14,11 @@ import { CLIENT_STRINGS } from '../messages/appMessages';
 import DatePicker from 'react-native-date-picker'
 
 const NuevoCliente: React.FC<Props> = observer(({ navigation }) => {
-
-  const [date, setDate] = useState(new Date())
-  const [open, setOpen] = useState(false)
-
   useEffect(() => {
     if (store.cliente || store.clienteById) {
       store.clearCliente();
     }
   }, [])
-
 
   const handleSaveCliente = async () => {
     await store.saveCliente();
@@ -65,22 +60,39 @@ const NuevoCliente: React.FC<Props> = observer(({ navigation }) => {
         style={styles.input}
       />
 
-      <Button onPress={() => setOpen(true)}>Date</Button>
-      <DatePicker
-        modal
-        mode='date'
-        locale='es-ES'
-        open={open}
-        date={date}
-        onConfirm={(date) => {
-          setOpen(false)
-          setDate(date)
-          console.warn(date);
-        }}
-        onCancel={() => {
-          setOpen(false)
-        }}
-      />
+      <Button style={styles.picker} onPress={() => store.setDateOpen(true)}>{CLIENT_STRINGS.dateLabel}
+        <DatePicker
+          modal
+          mode='date'
+          locale='es-ES'
+          open={store.dateOpen}
+          date={store.fecha}
+          onConfirm={(date) => {
+            store.setDateOpen(false)
+            store.setFecha(date)
+          }}
+          onCancel={() => {
+            store.setDateOpen(false)
+          }}
+        />
+      </Button>
+
+      <Button style={styles.picker} onPress={() => store.setHourOpen(true)}>{CLIENT_STRINGS.hourLabel}
+        <DatePicker
+          modal
+          mode='time'
+          locale='es-ES'
+          open={store.hourOpen}
+          date={store.hora}
+          onConfirm={(hour) => {
+            store.setHourOpen(false)
+            store.setHora(hour)
+          }}
+          onCancel={() => {
+            store.setHourOpen(false)
+          }}
+        />
+      </Button>
 
       <Button
         style={styles.boton}

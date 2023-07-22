@@ -15,6 +15,8 @@ export const CLIENT_STRINGS = {
     emailPlaceholder: 'correo@correo.com',
     companyLabel: 'Empresa',
     companyPlaceholder: 'Escribe la empresa donde trabajas',
+    dateLabel: 'Fecha',
+    hourLabel: 'Hora',
     saveButton: 'Guardar cliente'
 };
 

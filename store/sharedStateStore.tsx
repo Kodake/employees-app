@@ -21,12 +21,15 @@ class SharedStateStore {
     telefono = '';
     correo = '';
     empresa = '';
-    alerta = false;
+    fecha = new Date();
+    hora = new Date();
     cliente: NewCliente | undefined;
     clienteById: Cliente | null = null;
     clientes: Cliente[] = [];
     consultarAPI: boolean = false;
     isSaved: boolean = false;
+    dateOpen: boolean = false;
+    hourOpen: boolean = false;
 
     constructor() {
         initDatabase();
@@ -61,8 +64,20 @@ class SharedStateStore {
         this.empresa = empresa.trim().toUpperCase();
     }
 
-    setAlerta(alerta: boolean) {
-        this.alerta = alerta;
+    setFecha(fecha: Date) {
+        this.fecha = fecha;
+    }
+
+    setHora(hora: Date) {
+        this.hora = hora;
+    }
+
+    setDateOpen(dateOpen: boolean) {
+        this.dateOpen = dateOpen;
+    }
+
+    setHourOpen(hourOpen: boolean) {
+        this.hourOpen = hourOpen;
     }
 
     setIsSaved(isSaved: boolean) {

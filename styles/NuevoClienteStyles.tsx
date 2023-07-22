@@ -8,4 +8,8 @@ export const styles = StyleSheet.create({
     boton: {
         backgroundColor: '#2a9d8f',
     },
+    picker: {
+        marginBottom: 10,
+        backgroundColor: 'transparent',
+    },
 });
