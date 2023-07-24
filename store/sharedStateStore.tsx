@@ -66,9 +66,9 @@ class SharedStateStore {
     }
 
     setFecha(fecha: Date) {
-        const hour = moment(fecha).format('YYYY-MM-DD');
+        const day = moment(fecha).format('YYYY-MM-DD');
         let dateString = moment(this.fecha).toLocaleString();
-        dateString = hour;
+        dateString = day;
         console.warn(dateString);
     }
 
