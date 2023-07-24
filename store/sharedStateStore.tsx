@@ -14,6 +14,7 @@ import {
     updateCliente,
     validateExistingCorreo
 } from "../db/database";
+import moment from "moment";
 
 class SharedStateStore {
     idCliente = 0;
@@ -65,11 +66,17 @@ class SharedStateStore {
     }
 
     setFecha(fecha: Date) {
-        this.fecha = fecha;
+        const hour = moment(fecha).format('YYYY-MM-DD');
+        let dateString = moment(this.fecha).toLocaleString();
+        dateString = hour;
+        console.warn(dateString);
     }
 
     setHora(hora: Date) {
-        this.hora = hora;
+        const hour = moment(hora).format('hh:mm:ss a');
+        let timeString = moment(this.hora).toLocaleString();
+        timeString = hour;
+        console.warn(timeString);
     }
 
     setDateOpen(dateOpen: boolean) {
