@@ -64,7 +64,7 @@ const NuevoCliente: React.FC<Props> = observer(({ navigation }) => {
         <DatePicker
           modal
           mode='date'
-          locale='es-ES'
+          locale='es_ES'
           open={store.dateOpen}
           date={store.fecha}
           onConfirm={(date) => {
@@ -81,7 +81,7 @@ const NuevoCliente: React.FC<Props> = observer(({ navigation }) => {
         <DatePicker
           modal
           mode='time'
-          locale='es-ES'
+          locale='es_ES'
           open={store.hourOpen}
           date={store.hora}
           onConfirm={(hour) => {

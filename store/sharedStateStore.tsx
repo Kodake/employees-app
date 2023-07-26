@@ -66,17 +66,15 @@ class SharedStateStore {
     }
 
     setFecha(fecha: Date) {
-        const day = moment(fecha).format('YYYY-MM-DD');
-        let dateString = moment(this.fecha).toLocaleString();
-        dateString = day;
-        console.warn(dateString);
+        this.fecha = fecha;
     }
 
     setHora(hora: Date) {
-        const hour = moment(hora).format('hh:mm:ss a');
-        let timeString = moment(this.hora).toLocaleString();
-        timeString = hour;
-        console.warn(timeString);
+        if (hora instanceof Date) {
+            hora.setUTCHours(hora.getUTCHours() - 4);
+            hora.setUTCMinutes(hora.getUTCMinutes());
+            this.hora = hora;
+        }
     }
 
     setDateOpen(dateOpen: boolean) {
