@@ -7,9 +7,10 @@ import store from '../store/sharedStateStore';
 import { observer } from 'mobx-react';
 import { Props } from '../interfaces/appInterfaces';
 import { CLIENT_STRINGS } from '../messages/appMessages';
+import DatePicker from 'react-native-date-picker';
 
 const EditarCliente: React.FC<Props> = observer(({ navigation }) => {
-  
+
   useEffect(() => {
     if (store.clienteById) {
       store.setIdCliente(store.clienteById.id || 0);
@@ -17,6 +18,7 @@ const EditarCliente: React.FC<Props> = observer(({ navigation }) => {
       store.setTelefono(store.clienteById.telefono || '');
       store.setCorreo(store.clienteById.correo || '');
       store.setEmpresa(store.clienteById.empresa || '');
+      store.setFecha(store.clienteById.fecha || new Date());
     }
   }, [store.clienteById]);
 
@@ -26,8 +28,10 @@ const EditarCliente: React.FC<Props> = observer(({ navigation }) => {
     store.setTelefono(store.telefono);
     store.setCorreo(store.correo);
     store.setEmpresa(store.empresa);
+    store.setFecha(store.fecha);
 
     await store.updateCliente(id!);
+
     if (store.isSaved) {
       store.clearCliente();
       navigation.navigate('Inicio');
@@ -69,6 +73,23 @@ const EditarCliente: React.FC<Props> = observer(({ navigation }) => {
         value={store.empresa}
         style={styles.input}
       />
+
+      <Button style={styles.picker} onPress={() => store.setDateOpen(true)}>{CLIENT_STRINGS.dateLabel}
+        <DatePicker
+          modal
+          mode='datetime'
+          locale='es_ES'
+          open={store.dateOpen}
+          date={new Date(store.fecha)}
+          onConfirm={(date) => {
+            store.setDateOpen(false)
+            store.setFecha(date)
+          }}
+          onCancel={() => {
+            store.setDateOpen(false)
+          }}
+        />
+      </Button>
 
       <Button
         style={styles.boton}

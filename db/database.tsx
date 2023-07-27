@@ -12,7 +12,7 @@ export async function getDbConnection() {
 
 export async function createTables(db: SQLiteDatabase | null) {
   const query = `CREATE TABLE IF NOT EXISTS Clientes(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(50), 
-  telefono VARCHAR(10), correo VARCHAR(50), empresa VARCHAR(50), fecha VARCHAR(50))`;
+  telefono VARCHAR(10), correo VARCHAR(50), empresa VARCHAR(50), fecha DATE)`;
   return await db?.executeSql(query);
 }
 
@@ -65,7 +65,7 @@ export const insertCliente = async (db: SQLiteDatabase, cliente: NewCliente) => 
     VALUES (?, ?, ?, ?, ?)
   `;
   const { nombre, telefono, correo, empresa, fecha } = cliente;
-  await db.executeSql(insertQuery, [nombre, telefono, correo, empresa, fecha.toLocaleString()]);
+  await db.executeSql(insertQuery, [nombre, telefono, correo, empresa, fecha.toString()]);
 }
 
 export const updateCliente = async (db: SQLiteDatabase, cliente: Cliente) => {
@@ -75,7 +75,7 @@ export const updateCliente = async (db: SQLiteDatabase, cliente: Cliente) => {
     WHERE id = ?
   `;
   const { id, nombre, telefono, correo, empresa, fecha } = cliente;
-  await db.executeSql(updateQuery, [nombre, telefono, correo, empresa, fecha.toLocaleString(), id]);
+  await db.executeSql(updateQuery, [nombre, telefono, correo, empresa, fecha.toString(), id]);
 }
 
 export const deleteClienteById = async (db: SQLiteDatabase, id: number) => {

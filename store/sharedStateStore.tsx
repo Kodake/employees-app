@@ -40,6 +40,7 @@ class SharedStateStore {
         this.setTelefono('');
         this.setCorreo('');
         this.setEmpresa('');
+        this.setFecha(new Date());
     }
 
     setIdCliente(id: number) {
