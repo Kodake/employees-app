@@ -14,7 +14,6 @@ import {
     updateCliente,
     validateExistingCorreo
 } from "../db/database";
-import moment from "moment";
 
 class SharedStateStore {
     idCliente = 0;
@@ -23,14 +22,12 @@ class SharedStateStore {
     correo = '';
     empresa = '';
     fecha = new Date();
-    hora = new Date();
     cliente: NewCliente | undefined;
     clienteById: Cliente | null = null;
     clientes: Cliente[] = [];
     consultarAPI: boolean = false;
     isSaved: boolean = false;
     dateOpen: boolean = false;
-    hourOpen: boolean = false;
 
     constructor() {
         initDatabase();
@@ -69,20 +66,8 @@ class SharedStateStore {
         this.fecha = fecha;
     }
 
-    setHora(hora: Date) {
-        if (hora instanceof Date) {
-            hora.setUTCHours(hora.getUTCHours() - 4);
-            hora.setUTCMinutes(hora.getUTCMinutes());
-            this.hora = hora;
-        }
-    }
-
     setDateOpen(dateOpen: boolean) {
         this.dateOpen = dateOpen;
-    }
-
-    setHourOpen(hourOpen: boolean) {
-        this.hourOpen = hourOpen;
     }
 
     setIsSaved(isSaved: boolean) {
@@ -209,7 +194,8 @@ class SharedStateStore {
             nombre: this.nombre,
             telefono: this.telefono,
             correo: this.correo,
-            empresa: this.empresa
+            empresa: this.empresa,
+            fecha: this.fecha
         }
 
         try {
@@ -248,7 +234,8 @@ class SharedStateStore {
             nombre: this.nombre,
             telefono: this.telefono,
             correo: this.correo,
-            empresa: this.empresa
+            empresa: this.empresa,
+            fecha: this.fecha
         };
 
         try {

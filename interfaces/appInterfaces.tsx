@@ -10,6 +10,7 @@ export interface Cliente {
     telefono: string;
     correo: string;
     empresa: string;
+    fecha: Date;
 }
 
 export interface NewCliente {
@@ -17,4 +18,5 @@ export interface NewCliente {
     telefono: string;
     correo: string;
     empresa: string;
+    fecha: Date;
 }

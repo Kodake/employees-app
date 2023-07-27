@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import {
   TextInput,
@@ -63,7 +63,7 @@ const NuevoCliente: React.FC<Props> = observer(({ navigation }) => {
       <Button style={styles.picker} onPress={() => store.setDateOpen(true)}>{CLIENT_STRINGS.dateLabel}
         <DatePicker
           modal
-          mode='date'
+          mode='datetime'
           locale='es_ES'
           open={store.dateOpen}
           date={store.fecha}
@@ -73,23 +73,6 @@ const NuevoCliente: React.FC<Props> = observer(({ navigation }) => {
           }}
           onCancel={() => {
             store.setDateOpen(false)
-          }}
-        />
-      </Button>
-
-      <Button style={styles.picker} onPress={() => store.setHourOpen(true)}>{CLIENT_STRINGS.hourLabel}
-        <DatePicker
-          modal
-          mode='time'
-          locale='es_ES'
-          open={store.hourOpen}
-          date={store.hora}
-          onConfirm={(hour) => {
-            store.setHourOpen(false)
-            store.setHora(hour)
-          }}
-          onCancel={() => {
-            store.setHourOpen(false)
           }}
         />
       </Button>

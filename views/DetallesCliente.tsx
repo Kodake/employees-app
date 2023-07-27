@@ -46,6 +46,9 @@ const DetallesCliente: React.FC<Props> = ({ navigation }) => {
       <Text style={styles.texto}>
         {CLIENT_STRINGS.phoneLabel}: <Subheading>{store.clienteById?.telefono}</Subheading>
       </Text>
+      <Text style={styles.texto}>
+        {CLIENT_STRINGS.dateLabel}: <Subheading>{store.clienteById?.fecha.toLocaleString()}</Subheading>
+      </Text>
 
       <Button
         icon="close"
