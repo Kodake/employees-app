@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { FlatList, View } from 'react-native';
+import { Alert, FlatList, View } from 'react-native';
 import { List, Headline, Button, FAB } from 'react-native-paper';
 import globalStyles from '../styles/global';
 import { styles } from '../styles/InicioStyles';
 import { observer } from 'mobx-react';
 import store from '../store/sharedStateStore';
 import { Empleado, Props } from '../interfaces/appInterfaces';
-import { EMPLOYEE_STRINGS } from '../messages/appMessages';
+import { CONFIRMATION_MESSAGES, EMPLOYEE_STRINGS } from '../messages/appMessages';
 
 const Inicio: React.FC<Props> = observer(({ navigation }) => {
 
@@ -24,6 +24,24 @@ const Inicio: React.FC<Props> = observer(({ navigation }) => {
       await store.fetchEmpleadoById(id);
       store.clearEmpleado();
       navigation.navigate('DetallesEmpleado');
+    }
+  };
+
+  const handleConfirmation = () => {
+    Alert.alert(
+      CONFIRMATION_MESSAGES.deleteConfirmation,
+      CONFIRMATION_MESSAGES.deleteConfirmationDescription,
+      [
+        { text: CONFIRMATION_MESSAGES.deleteConfirmationYes, onPress: () => handleDeleteEmployee(store.empleadoById?.id) },
+        { text: CONFIRMATION_MESSAGES.deleteConfirmationCancel, style: 'cancel' },
+      ],
+    );
+  };
+
+  const handleDeleteEmployee = async (id?: number) => {
+    if (id) {
+      await store.deleteEmpleadoById(id);
+      navigation.navigate('Inicio');
     }
   };
 
@@ -50,6 +68,7 @@ const Inicio: React.FC<Props> = observer(({ navigation }) => {
             title={item.nombre}
             description={item.posicion}
             onPress={() => handleFetchEmpleado(item.id)}
+            onLongPress={handleConfirmation}
           />
         )}
       />
