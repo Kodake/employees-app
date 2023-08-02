@@ -6,64 +6,64 @@ import {
   Button
 } from 'react-native-paper';
 import globalStyles from '../styles/global';
-import { styles } from '../styles/NuevoClienteStyles';
+import { styles } from '../styles/NuevoEmpleadoStyles';
 import store from '../store/sharedStateStore';
 import { observer } from 'mobx-react';
 import { Props } from '../interfaces/appInterfaces';
-import { CLIENT_STRINGS } from '../messages/appMessages';
+import { EMPLOYEE_STRINGS } from '../messages/appMessages';
 import DatePicker from 'react-native-date-picker'
 
-const NuevoCliente: React.FC<Props> = observer(({ navigation }) => {
+const NuevoEmpleado: React.FC<Props> = observer(({ navigation }) => {
   useEffect(() => {
-    if (store.cliente || store.clienteById) {
-      store.clearCliente();
+    if (store.empleado || store.empleadoById) {
+      store.clearEmpleado();
     }
-  }, [])
+  }, []);
 
-  const handleSaveCliente = async () => {
-    await store.saveCliente();
+  const handleSaveEmpleado = async () => {
+    await store.saveEmpleado();
     if (store.isSaved) {
-      store.clearCliente();
+      store.clearEmpleado();
       navigation.navigate('Inicio');
     }
   };
 
   return (
     <View style={globalStyles.contenedor}>
-      <Headline style={globalStyles.titulo}>Agregar Cliente</Headline>
+      <Headline style={globalStyles.titulo}>{EMPLOYEE_STRINGS.title}</Headline>
 
       <TextInput
-        label={CLIENT_STRINGS.nameLabel}
-        placeholder={CLIENT_STRINGS.namePlaceholder}
+        label={EMPLOYEE_STRINGS.nameLabel}
+        placeholder={EMPLOYEE_STRINGS.namePlaceholder}
         onChangeText={(texto) => store.setNombre(texto)}
         style={styles.input}
       />
 
       <TextInput
-        label={CLIENT_STRINGS.phoneLabel}
-        placeholder={CLIENT_STRINGS.phonePlaceholder}
+        label={EMPLOYEE_STRINGS.phoneLabel}
+        placeholder={EMPLOYEE_STRINGS.phonePlaceholder}
         onChangeText={(texto) => store.setTelefono(texto)}
         style={styles.input}
       />
 
       <TextInput
-        label={CLIENT_STRINGS.emailLabel}
-        placeholder={CLIENT_STRINGS.emailPlaceholder}
+        label={EMPLOYEE_STRINGS.emailLabel}
+        placeholder={EMPLOYEE_STRINGS.emailPlaceholder}
         onChangeText={(texto) => store.setCorreo(texto)}
         style={styles.input}
       />
 
       <TextInput
-        label={CLIENT_STRINGS.companyLabel}
-        placeholder={CLIENT_STRINGS.companyPlaceholder}
-        onChangeText={(texto) => store.setEmpresa(texto)}
+        label={EMPLOYEE_STRINGS.positionLabel}
+        placeholder={EMPLOYEE_STRINGS.positionPlaceholder}
+        onChangeText={(texto) => store.setPosicion(texto)}
         style={styles.input}
       />
 
-      <Button style={styles.picker} onPress={() => store.setDateOpen(true)}>{CLIENT_STRINGS.dateLabel}
+      <Button style={styles.picker} onPress={() => store.setDateOpen(true)}>{EMPLOYEE_STRINGS.dateLabel}
         <DatePicker
           modal
-          mode='datetime'
+          mode='date'
           locale='es_ES'
           open={store.dateOpen}
           date={store.fecha}
@@ -81,12 +81,12 @@ const NuevoCliente: React.FC<Props> = observer(({ navigation }) => {
         style={styles.boton}
         icon="content-save"
         mode="contained"
-        onPress={handleSaveCliente}
+        onPress={handleSaveEmpleado}
       >
-        {CLIENT_STRINGS.saveButton}
+        {EMPLOYEE_STRINGS.saveButton}
       </Button>
     </View>
   );
 });
 
-export default NuevoCliente;
+export default NuevoEmpleado;

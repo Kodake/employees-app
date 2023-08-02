@@ -1,30 +1,30 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import notifee from '@notifee/react-native';
-import { Cliente, NewCliente } from "../interfaces/appInterfaces";
+import { Empleado, NewEmpleado } from "../interfaces/appInterfaces";
 import * as yup from 'yup';
 import { Alert } from "react-native";
 import { NOTIFICATION_STRINGS, VALIDATION_STRINGS } from "../messages/appMessages";
 import {
     getDbConnection,
     initDatabase,
-    insertCliente,
-    selectClienteById,
-    selectClientes,
-    deleteClienteById,
-    updateCliente,
+    insertEmpleado,
+    selectEmpleadoById,
+    selectEmpleados,
+    deleteEmpleadoById,
+    updateEmpleado,
     validateExistingCorreo
 } from "../db/database";
 
 class SharedStateStore {
-    idCliente = 0;
+    idEmpleado = 0;
     nombre = '';
     telefono = '';
     correo = '';
-    empresa = '';
+    posicion = '';
     fecha = new Date();
-    cliente: NewCliente | undefined;
-    clienteById: Cliente | null = null;
-    clientes: Cliente[] = [];
+    empleado: NewEmpleado | undefined;
+    empleadoById: Empleado | null = null;
+    empleados: Empleado[] = [];
     consultarAPI: boolean = false;
     isSaved: boolean = false;
     dateOpen: boolean = false;
@@ -34,17 +34,17 @@ class SharedStateStore {
         makeAutoObservable(this);
     }
 
-    clearCliente() {
-        this.setIdCliente(0);
+    clearEmpleado() {
+        this.setIdEmpleado(0);
         this.setNombre('');
         this.setTelefono('');
         this.setCorreo('');
-        this.setEmpresa('');
+        this.setPosicion('');
         this.setFecha(new Date());
     }
 
-    setIdCliente(id: number) {
-        this.idCliente = id;
+    setIdEmpleado(id: number) {
+        this.idEmpleado = id;
     }
 
     setNombre(nombre: string) {
@@ -59,8 +59,8 @@ class SharedStateStore {
         this.correo = correo.trim().toUpperCase();
     }
 
-    setEmpresa(empresa: string) {
-        this.empresa = empresa.trim().toUpperCase();
+    setPosicion(posicion: string) {
+        this.posicion = posicion.trim().toUpperCase();
     }
 
     setFecha(fecha: Date) {
@@ -75,16 +75,16 @@ class SharedStateStore {
         this.isSaved = isSaved;
     }
 
-    setCliente(cliente: NewCliente): void {
-        this.cliente = cliente
+    setEmpleado(empleado: NewEmpleado): void {
+        this.empleado = empleado;
     }
 
-    setClienteById(cliente: Cliente | null): void {
-        this.clienteById = cliente
+    setEmpleadoById(empleado: Empleado | null): void {
+        this.empleadoById = empleado;
     }
 
-    setClientes(clientes: Cliente[]): void {
-        this.clientes = clientes
+    setEmpleados(empleados: Empleado[]): void {
+        this.empleados = empleados;
     }
 
     setConsultarAPI(consultarAPI: boolean): void {
@@ -103,10 +103,10 @@ class SharedStateStore {
         correo: yup.string()
             .email(VALIDATION_STRINGS.correoInvalid)
             .required(VALIDATION_STRINGS.correoRequired),
-        empresa: yup.string()
-            .required(VALIDATION_STRINGS.empresaRequired)
-            .min(2, VALIDATION_STRINGS.empresaMinLength)
-            .max(100, VALIDATION_STRINGS.empresaMaxLength),
+        posicion: yup.string()
+            .required(VALIDATION_STRINGS.posicionRequired)
+            .min(2, VALIDATION_STRINGS.posicionMinLength)
+            .max(100, VALIDATION_STRINGS.posicionMaxLength),
     });
 
     displayNotification = async (title: string, body: string) => {
@@ -131,16 +131,16 @@ class SharedStateStore {
         });
     };
 
-    validateCliente() {
-        const cliente = {
+    validateEmpleado() {
+        const empleado = {
             nombre: this.nombre,
             telefono: this.telefono,
             correo: this.correo,
-            empresa: this.empresa,
+            posicion: this.posicion,
         };
 
         try {
-            this.validationSchema.validateSync(cliente, { abortEarly: false });
+            this.validationSchema.validateSync(empleado, { abortEarly: false });
             return true;
         } catch (error) {
             runInAction(() => {
@@ -161,47 +161,47 @@ class SharedStateStore {
         }
     }
 
-    fetchClientes = async () => {
+    fetchEmpleados = async () => {
         try {
             const db = await getDbConnection();
-            const clientes = await selectClientes(db);
+            const empleados = await selectEmpleados(db);
             runInAction(() => {
-                this.setClientes(clientes);
+                this.setEmpleados(empleados);
             });
         } catch (error) {
             console.error(error);
         }
     }
 
-    fetchClienteById = async (id: number) => {
+    fetchEmpleadoById = async (id: number) => {
         try {
             const db = await getDbConnection();
-            const cliente = await selectClienteById(db, id);
+            const empleado = await selectEmpleadoById(db, id);
             runInAction(() => {
-                return this.setClienteById(cliente);
+                return this.setEmpleadoById(empleado);
             });
         } catch (error) {
             console.error(error);
         }
     }
 
-    saveCliente = async () => {
-        if (!this.validateCliente()) {
+    saveEmpleado = async () => {
+        if (!this.validateEmpleado()) {
             this.setIsSaved(false);
             return;
         }
 
-        const newCliente = {
+        const newEmpleado = {
             nombre: this.nombre,
             telefono: this.telefono,
             correo: this.correo,
-            empresa: this.empresa,
+            posicion: this.posicion,
             fecha: this.fecha
         }
 
         try {
             const db = await getDbConnection();
-            const correoExists = await validateExistingCorreo(db, newCliente.correo);
+            const correoExists = await validateExistingCorreo(db, newEmpleado.correo);
 
             if (correoExists) {
                 Alert.alert(VALIDATION_STRINGS.validationError, VALIDATION_STRINGS.correoExists);
@@ -209,7 +209,7 @@ class SharedStateStore {
                 return;
             }
 
-            await insertCliente(db, newCliente);
+            await insertEmpleado(db, newEmpleado);
 
             await this.displayNotification(
                 NOTIFICATION_STRINGS.notificationTitle,
@@ -217,39 +217,39 @@ class SharedStateStore {
             );
             runInAction(() => {
                 this.setIsSaved(true);
-                this.fetchClientes();
+                this.fetchEmpleados();
             });
         } catch (error) {
             console.error(error);
         }
     }
 
-    updateCliente = async (id: number) => {
-        if (!this.validateCliente() || !id) {
+    updateEmpleado = async (id: number) => {
+        if (!this.validateEmpleado() || !id) {
             this.setIsSaved(false);
             return;
         }
 
-        const updatedCliente = {
+        const updatedEmpleado = {
             id: id,
             nombre: this.nombre,
             telefono: this.telefono,
             correo: this.correo,
-            empresa: this.empresa,
+            posicion: this.posicion,
             fecha: this.fecha
         };
 
         try {
             const db = await getDbConnection();
             this.setIsSaved(false);
-            const existingCliente = await validateExistingCorreo(db, updatedCliente.correo);
+            const existingEmpleado = await validateExistingCorreo(db, updatedEmpleado.correo);
 
-            if (existingCliente && existingCliente.id !== id) {
-                Alert.alert(VALIDATION_STRINGS.validationError, VALIDATION_STRINGS.correoExistsForAnotherCliente);
+            if (existingEmpleado && existingEmpleado.id !== id) {
+                Alert.alert(VALIDATION_STRINGS.validationError, VALIDATION_STRINGS.correoExistsForAnotherEmpleado);
                 return;
             }
 
-            await updateCliente(db, updatedCliente);
+            await updateEmpleado(db, updatedEmpleado);
 
             await this.displayNotification(
                 NOTIFICATION_STRINGS.notificationTitle,
@@ -257,26 +257,26 @@ class SharedStateStore {
             );
             runInAction(() => {
                 this.setIsSaved(true);
-                this.fetchClientes();
+                this.fetchEmpleados();
             });
         } catch (error) {
             console.log(error);
         }
     }
 
-    deleteClienteById = async (id: number) => {
+    deleteEmpleadoById = async (id: number) => {
         try {
             if (!id) return;
 
             const db = await getDbConnection();
-            await deleteClienteById(db, id);
+            await deleteEmpleadoById(db, id);
 
             await this.displayNotification(
                 NOTIFICATION_STRINGS.notificationTitle,
                 NOTIFICATION_STRINGS.notificationBodyOnDelete
             );
             runInAction(() => {
-                this.fetchClientes();
+                this.fetchEmpleados();
             });
         } catch (error) {
             console.error(error);

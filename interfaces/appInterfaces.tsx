@@ -4,19 +4,19 @@ export interface Props {
     navigation: NavigationProp<any>;
 }
 
-export interface Cliente {
+export interface Empleado {
     id: number;
     nombre: string;
     telefono: string;
     correo: string;
-    empresa: string;
+    posicion: string;
     fecha: Date;
 }
 
-export interface NewCliente {
+export interface NewEmpleado {
     nombre: string;
     telefono: string;
     correo: string;
-    empresa: string;
+    posicion: string;
     fecha: Date;
 }

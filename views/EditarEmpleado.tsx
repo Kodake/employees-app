@@ -2,82 +2,82 @@ import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { TextInput, Headline, Button } from 'react-native-paper';
 import globalStyles from '../styles/global';
-import { styles } from '../styles/NuevoClienteStyles';
+import { styles } from '../styles/NuevoEmpleadoStyles';
 import store from '../store/sharedStateStore';
 import { observer } from 'mobx-react';
 import { Props } from '../interfaces/appInterfaces';
-import { CLIENT_STRINGS } from '../messages/appMessages';
+import { EMPLOYEE_STRINGS } from '../messages/appMessages';
 import DatePicker from 'react-native-date-picker';
 
-const EditarCliente: React.FC<Props> = observer(({ navigation }) => {
+const EditarEmpleado: React.FC<Props> = observer(({ navigation }) => {
 
   useEffect(() => {
-    if (store.clienteById) {
-      store.setIdCliente(store.clienteById.id || 0);
-      store.setNombre(store.clienteById.nombre || '');
-      store.setTelefono(store.clienteById.telefono || '');
-      store.setCorreo(store.clienteById.correo || '');
-      store.setEmpresa(store.clienteById.empresa || '');
-      store.setFecha(store.clienteById.fecha || new Date());
+    if (store.empleadoById) {
+      store.setIdEmpleado(store.empleadoById.id || 0);
+      store.setNombre(store.empleadoById.nombre || '');
+      store.setTelefono(store.empleadoById.telefono || '');
+      store.setCorreo(store.empleadoById.correo || '');
+      store.setPosicion(store.empleadoById.posicion || '');
+      store.setFecha(store.empleadoById.fecha || new Date());
     }
-  }, [store.clienteById]);
+  }, [store.empleadoById]);
 
-  const handleUpdateCliente = async (id?: number) => {
-    store.setIdCliente(store.idCliente)
+  const handleUpdateEmpleado = async (id?: number) => {
+    store.setIdEmpleado(store.idEmpleado)
     store.setNombre(store.nombre);
     store.setTelefono(store.telefono);
     store.setCorreo(store.correo);
-    store.setEmpresa(store.empresa);
+    store.setPosicion(store.posicion);
     store.setFecha(store.fecha);
 
-    await store.updateCliente(id!);
+    await store.updateEmpleado(id!);
 
     if (store.isSaved) {
-      store.clearCliente();
+      store.clearEmpleado();
       navigation.navigate('Inicio');
     }
   };
 
   return (
     <View style={globalStyles.contenedor}>
-      <Headline style={globalStyles.titulo}>{CLIENT_STRINGS.editClient}</Headline>
+      <Headline style={globalStyles.titulo}>{EMPLOYEE_STRINGS.editEmployee}</Headline>
 
       <TextInput
-        label={CLIENT_STRINGS.nameLabel}
-        placeholder={CLIENT_STRINGS.namePlaceholder}
+        label={EMPLOYEE_STRINGS.nameLabel}
+        placeholder={EMPLOYEE_STRINGS.namePlaceholder}
         onChangeText={(texto) => store.setNombre(texto)}
         value={store.nombre}
         style={styles.input}
       />
 
       <TextInput
-        label={CLIENT_STRINGS.phoneLabel}
-        placeholder={CLIENT_STRINGS.phonePlaceholder}
+        label={EMPLOYEE_STRINGS.phoneLabel}
+        placeholder={EMPLOYEE_STRINGS.phonePlaceholder}
         onChangeText={(texto) => store.setTelefono(texto)}
         value={store.telefono}
         style={styles.input}
       />
 
       <TextInput
-        label={CLIENT_STRINGS.emailLabel}
-        placeholder={CLIENT_STRINGS.emailPlaceholder}
+        label={EMPLOYEE_STRINGS.emailLabel}
+        placeholder={EMPLOYEE_STRINGS.emailPlaceholder}
         onChangeText={(texto) => store.setCorreo(texto)}
         value={store.correo}
         style={styles.input}
       />
 
       <TextInput
-        label={CLIENT_STRINGS.companyLabel}
-        placeholder={CLIENT_STRINGS.companyPlaceholder}
-        onChangeText={(texto) => store.setEmpresa(texto)}
-        value={store.empresa}
+        label={EMPLOYEE_STRINGS.positionLabel}
+        placeholder={EMPLOYEE_STRINGS.positionPlaceholder}
+        onChangeText={(texto) => store.setPosicion(texto)}
+        value={store.posicion}
         style={styles.input}
       />
 
-      <Button style={styles.picker} onPress={() => store.setDateOpen(true)}>{CLIENT_STRINGS.dateLabel}
+      <Button style={styles.picker} onPress={() => store.setDateOpen(true)}>{EMPLOYEE_STRINGS.dateLabel}
         <DatePicker
           modal
-          mode='datetime'
+          mode='date'
           locale='es_ES'
           open={store.dateOpen}
           date={new Date(store.fecha)}
@@ -95,12 +95,12 @@ const EditarCliente: React.FC<Props> = observer(({ navigation }) => {
         style={styles.boton}
         icon="content-save"
         mode="contained"
-        onPress={() => handleUpdateCliente(store.clienteById?.id)}
+        onPress={() => handleUpdateEmpleado(store.empleadoById?.id)}
       >
-        {CLIENT_STRINGS.updateClient}
+        {EMPLOYEE_STRINGS.updateEmployee}
       </Button>
     </View>
   );
 });
 
-export default EditarCliente;
+export default EditarEmpleado;

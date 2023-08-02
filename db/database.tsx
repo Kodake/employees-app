@@ -1,9 +1,9 @@
 import { ResultSet, SQLiteDatabase, enablePromise, openDatabase } from 'react-native-sqlite-storage';
-import { NewCliente, Cliente } from '../interfaces/appInterfaces';
+import { NewEmpleado, Empleado } from '../interfaces/appInterfaces';
 
 enablePromise(true);
 
-const DATABASE_NAME = 'Customers.db';
+const DATABASE_NAME = 'Company.db';
 
 export async function getDbConnection() {
   const db = await openDatabase({ name: DATABASE_NAME, location: 'default' });
@@ -11,8 +11,8 @@ export async function getDbConnection() {
 }
 
 export async function createTables(db: SQLiteDatabase | null) {
-  const query = `CREATE TABLE IF NOT EXISTS Clientes(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(50), 
-  telefono VARCHAR(10), correo VARCHAR(50), empresa VARCHAR(50), fecha DATE)`;
+  const query = `CREATE TABLE IF NOT EXISTS EMPLEADOS(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre VARCHAR(50),
+  telefono VARCHAR(10), correo VARCHAR(50), posicion VARCHAR(50), fecha DATE)`;
   return await db?.executeSql(query);
 }
 
@@ -21,8 +21,8 @@ export async function initDatabase() {
   await createTables(db);
 }
 
-export const validateExistingCorreo = async (db: SQLiteDatabase, correo: string): Promise<Cliente | null> => {
-  const selectQuery = `SELECT id, nombre, telefono, correo, empresa FROM CLIENTES WHERE correo = ?`;
+export const validateExistingCorreo = async (db: SQLiteDatabase, correo: string): Promise<Empleado | null> => {
+  const selectQuery = `SELECT id, nombre, telefono, correo, posicion FROM EMPLEADOS WHERE correo = ?`;
   const results = await db.executeSql(selectQuery, [correo]);
 
   if (results.length > 0 && results[0].rows.length > 0) {
@@ -32,53 +32,53 @@ export const validateExistingCorreo = async (db: SQLiteDatabase, correo: string)
   return null;
 }
 
-export const selectClientes = async (db: SQLiteDatabase) => {
-  const clientes: Cliente[] = [];
-  const selectQuery = `SELECT id, nombre, telefono, correo, empresa, fecha FROM CLIENTES`;
+export const selectEmpleados = async (db: SQLiteDatabase) => {
+  const empleados: Empleado[] = [];
+  const selectQuery = `SELECT id, nombre, telefono, correo, posicion, fecha FROM EMPLEADOS`;
   const results = await db.executeSql(selectQuery);
 
   results.forEach((resultSet: ResultSet) => {
     for (let index = 0; index < resultSet.rows.length; index++) {
-      clientes.push(resultSet.rows.item(index));
+      empleados.push(resultSet.rows.item(index));
     }
   });
 
-  return clientes;
+  return empleados;
 }
 
-export const selectClienteById = async (db: SQLiteDatabase, id: number) => {
-  let cliente: Cliente | null = null;
-  const selectQuery = `SELECT id, nombre, telefono, correo, empresa, fecha FROM CLIENTES WHERE id = ?`;
+export const selectEmpleadoById = async (db: SQLiteDatabase, id: number) => {
+  let empleado: Empleado | null = null;
+  const selectQuery = `SELECT id, nombre, telefono, correo, posicion, fecha FROM EMPLEADOS WHERE id = ?`;
   const results = await db.executeSql(selectQuery, [id]);
 
   if (results.length > 0 && results[0].rows.length > 0) {
-    cliente = results[0].rows.item(0);
-    return cliente;
+    empleado = results[0].rows.item(0);
+    return empleado;
   }
 
   return null;
 }
 
-export const insertCliente = async (db: SQLiteDatabase, cliente: NewCliente) => {
+export const insertEmpleado = async (db: SQLiteDatabase, empleado: NewEmpleado) => {
   const insertQuery = `
-    INSERT INTO CLIENTES (nombre, telefono, correo, empresa, fecha)
+    INSERT INTO EMPLEADOS (nombre, telefono, correo, posicion, fecha)
     VALUES (?, ?, ?, ?, ?)
   `;
-  const { nombre, telefono, correo, empresa, fecha } = cliente;
-  await db.executeSql(insertQuery, [nombre, telefono, correo, empresa, fecha.toString()]);
+  const { nombre, telefono, correo, posicion, fecha } = empleado;
+  await db.executeSql(insertQuery, [nombre, telefono, correo, posicion, fecha.toString()]);
 }
 
-export const updateCliente = async (db: SQLiteDatabase, cliente: Cliente) => {
+export const updateEmpleado = async (db: SQLiteDatabase, empleado: Empleado) => {
   const updateQuery = `
-    UPDATE CLIENTES
-    SET nombre = ?, telefono = ?, correo = ?, empresa = ?, fecha = ?
+    UPDATE EMPLEADOS
+    SET nombre = ?, telefono = ?, correo = ?, posicion = ?, fecha = ?
     WHERE id = ?
   `;
-  const { id, nombre, telefono, correo, empresa, fecha } = cliente;
-  await db.executeSql(updateQuery, [nombre, telefono, correo, empresa, fecha.toString(), id]);
+  const { id, nombre, telefono, correo, posicion, fecha } = empleado;
+  await db.executeSql(updateQuery, [nombre, telefono, correo, posicion, fecha.toString(), id]);
 }
 
-export const deleteClienteById = async (db: SQLiteDatabase, id: number) => {
-  const deleteQuery = `DELETE FROM CLIENTES WHERE id = ?`;
+export const deleteEmpleadoById = async (db: SQLiteDatabase, id: number) => {
+  const deleteQuery = `DELETE FROM EMPLEADOS WHERE id = ?`;
   await db.executeSql(deleteQuery, [id]);
 }

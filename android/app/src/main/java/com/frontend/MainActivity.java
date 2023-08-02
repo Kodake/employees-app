@@ -1,4 +1,4 @@
-package com.appointment_app;
+package com.employees_app;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -13,7 +13,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "appointment_app";
+    return "employees_app";
   }
 
   /**

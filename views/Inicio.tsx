@@ -5,25 +5,25 @@ import globalStyles from '../styles/global';
 import { styles } from '../styles/InicioStyles';
 import { observer } from 'mobx-react';
 import store from '../store/sharedStateStore';
-import { Cliente, Props } from '../interfaces/appInterfaces';
-import { CLIENT_STRINGS } from '../messages/appMessages';
+import { Empleado, Props } from '../interfaces/appInterfaces';
+import { EMPLOYEE_STRINGS } from '../messages/appMessages';
 
 const Inicio: React.FC<Props> = observer(({ navigation }) => {
 
   useEffect(() => {
-    store.fetchClientes();
+    store.fetchEmpleados();
   }, [])
 
 
-  const handleNavigateNewCliente = () => {
-    navigation.navigate('NuevoCliente');
+  const handleNavigateNewEmpleado = () => {
+    navigation.navigate('NuevoEmpleado');
   }
 
-  const handleFetchCliente = async (id?: number) => {
+  const handleFetchEmpleado = async (id?: number) => {
     if (id) {
-      await store.fetchClienteById(id);
-      store.clearCliente();
-      navigation.navigate('DetallesCliente');
+      await store.fetchEmpleadoById(id);
+      store.clearEmpleado();
+      navigation.navigate('DetallesEmpleado');
     }
   };
 
@@ -33,23 +33,23 @@ const Inicio: React.FC<Props> = observer(({ navigation }) => {
         style={styles.boton}
         icon="plus"
         mode="contained"
-        onPress={handleNavigateNewCliente}
+        onPress={handleNavigateNewEmpleado}
       >
-        {CLIENT_STRINGS.newClient}
+        {EMPLOYEE_STRINGS.newEmployee}
       </Button>
 
       <Headline style={globalStyles.titulo}>
-        {store.clientes.length > 0 ? CLIENT_STRINGS.clients : CLIENT_STRINGS.noClientsYet}
+        {store.empleados.length > 0 ? EMPLOYEE_STRINGS.employees : EMPLOYEE_STRINGS.noEmployeesYet}
       </Headline>
 
       <FlatList
-        data={store.clientes}
-        keyExtractor={(cliente: Cliente) => cliente.id.toString()}
-        renderItem={({ item }: { item: Cliente }) => (
+        data={store.empleados}
+        keyExtractor={(empleado: Empleado) => empleado.id.toString()}
+        renderItem={({ item }: { item: Empleado }) => (
           <List.Item
             title={item.nombre}
-            description={item.empresa}
-            onPress={() => handleFetchCliente(item.id)}
+            description={item.posicion}
+            onPress={() => handleFetchEmpleado(item.id)}
           />
         )}
       />
@@ -58,7 +58,7 @@ const Inicio: React.FC<Props> = observer(({ navigation }) => {
         color='white'
         icon="plus"
         style={styles.fab}
-        onPress={handleNavigateNewCliente}
+        onPress={handleNavigateNewEmpleado}
       />
     </View>
   );
