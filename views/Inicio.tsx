@@ -27,12 +27,14 @@ const Inicio: React.FC<Props> = observer(({ navigation }) => {
     }
   };
 
-  const handleConfirmation = () => {
+  const handleConfirmation = (id: number) => {
+    store.setIdEmpleado(id);
+
     Alert.alert(
       CONFIRMATION_MESSAGES.deleteConfirmation,
       CONFIRMATION_MESSAGES.deleteConfirmationDescription,
       [
-        { text: CONFIRMATION_MESSAGES.deleteConfirmationYes, onPress: () => handleDeleteEmployee(store.empleadoById?.id) },
+        { text: CONFIRMATION_MESSAGES.deleteConfirmationYes, onPress: () => handleDeleteEmployee(store.idEmpleado) },
         { text: CONFIRMATION_MESSAGES.deleteConfirmationCancel, style: 'cancel' },
       ],
     );
@@ -68,7 +70,7 @@ const Inicio: React.FC<Props> = observer(({ navigation }) => {
             title={item.nombre}
             description={item.posicion}
             onPress={() => handleFetchEmpleado(item.id)}
-            onLongPress={handleConfirmation}
+            onLongPress={() => handleConfirmation(item.id)}
           />
         )}
       />
