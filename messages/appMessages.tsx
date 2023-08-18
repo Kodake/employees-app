@@ -46,6 +46,7 @@ export const CONFIRMATION_MESSAGES = {
 
 export const NOTIFICATION_STRINGS = {
     notificationChannel: 'default',
+    notificationSound: 'default',
     notificationChannelName: 'default channel',
     notificationTitle: 'Appointment App',
     notificationBodyOnSave: 'Empleado agregado satisfactoriamente!',

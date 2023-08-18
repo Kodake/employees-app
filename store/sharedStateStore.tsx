@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import notifee from '@notifee/react-native';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 import { Empleado, NewEmpleado } from "../interfaces/appInterfaces";
 import * as yup from 'yup';
 import { Alert } from "react-native";
@@ -115,19 +115,16 @@ class SharedStateStore {
         const channelId = await notifee.createChannel({
             id: NOTIFICATION_STRINGS.notificationChannel,
             name: NOTIFICATION_STRINGS.notificationChannelName,
+            sound: NOTIFICATION_STRINGS.notificationSound,
+            importance: AndroidImportance.HIGH,
+            vibration: true,
         });
 
         await notifee.displayNotification({
+            id: '1',
             title: title,
             body: body,
-            android: {
-                channelId,
-                smallIcon: 'ic_launcher',
-                pressAction: {
-                    id: 'default',
-                },
-                actions: []
-            },
+            android: { channelId },
         });
     };
 
