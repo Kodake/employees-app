@@ -107,6 +107,8 @@ class SharedStateStore {
             .required(VALIDATION_STRINGS.posicionRequired)
             .min(2, VALIDATION_STRINGS.posicionMinLength)
             .max(100, VALIDATION_STRINGS.posicionMaxLength),
+        fecha: yup.string()
+            .required(VALIDATION_STRINGS.fechaRequired)
     });
 
     displayNotification = async (title: string, body: string) => {
@@ -134,6 +136,7 @@ class SharedStateStore {
             telefono: this.telefono,
             correo: this.correo,
             posicion: this.posicion,
+            fecha: this.fecha
         };
 
         try {

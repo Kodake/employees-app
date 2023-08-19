@@ -35,6 +35,7 @@ export const VALIDATION_STRINGS = {
     posicionRequired: 'La posición es obligatoria',
     posicionMinLength: 'La posición debe tener al menos 2 caracteres',
     posicionMaxLength: 'La posición puede tener como máximo 50 caracteres',
+    fechaRequired: 'La fecha es obligatoria',
 };
 
 export const CONFIRMATION_MESSAGES = {

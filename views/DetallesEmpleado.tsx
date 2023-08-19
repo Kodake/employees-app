@@ -48,7 +48,7 @@ const DetallesEmpleado: React.FC<Props> = ({ navigation }) => {
         {EMPLOYEE_STRINGS.phoneLabel}: <Subheading>{store.empleadoById?.telefono}</Subheading>
       </Text>
       <Text style={styles.texto}>
-        {EMPLOYEE_STRINGS.dateLabel}: <Subheading>{moment(store.empleadoById?.fecha).format("DD/MM/YYYY")}</Subheading>
+        {EMPLOYEE_STRINGS.dateLabel}: <Subheading>{store.empleadoById?.fecha.toString()}</Subheading>
       </Text>
 
       <Button

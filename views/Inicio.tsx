@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Alert, FlatList, View } from 'react-native';
-import { List, Headline, Button, FAB } from 'react-native-paper';
+import { Alert, FlatList, SafeAreaView, View } from 'react-native';
+import { List, Headline, Button, FAB, Divider } from 'react-native-paper';
 import globalStyles from '../styles/global';
 import { styles } from '../styles/InicioStyles';
 import { observer } from 'mobx-react';
@@ -47,8 +47,26 @@ const Inicio: React.FC<Props> = observer(({ navigation }) => {
     }
   };
 
+  const itemSeparator = () => {
+    return (
+      <Divider bold />
+    )
+  }
+
+  const listEmptyMessage = () => {
+    return (
+      <Headline style={styles.listado}>
+        {EMPLOYEE_STRINGS.noEmployeesYet}
+      </Headline>
+    )
+  }
+
   return (
     <View style={globalStyles.contenedor}>
+      <Headline style={globalStyles.titulo}>
+        {EMPLOYEE_STRINGS.employees}
+      </Headline>
+
       <Button
         style={styles.boton}
         icon="plus"
@@ -58,22 +76,22 @@ const Inicio: React.FC<Props> = observer(({ navigation }) => {
         {EMPLOYEE_STRINGS.newEmployee}
       </Button>
 
-      <Headline style={globalStyles.titulo}>
-        {store.empleados.length > 0 ? EMPLOYEE_STRINGS.employees : EMPLOYEE_STRINGS.noEmployeesYet}
-      </Headline>
-
-      <FlatList
-        data={store.empleados}
-        keyExtractor={(empleado: Empleado) => empleado.id.toString()}
-        renderItem={({ item }: { item: Empleado }) => (
-          <List.Item
-            title={item.nombre}
-            description={item.posicion}
-            onPress={() => handleFetchEmpleado(item.id)}
-            onLongPress={() => handleConfirmation(item.id)}
-          />
-        )}
-      />
+      <SafeAreaView style={styles.safeArea}>
+        <FlatList
+          data={store.empleados}
+          keyExtractor={(empleado: Empleado) => empleado.id.toString()}
+          ListEmptyComponent={listEmptyMessage}
+          ItemSeparatorComponent={itemSeparator}
+          renderItem={({ item }: { item: Empleado }) => (
+            <List.Item
+              title={item.nombre}
+              description={item.posicion}
+              onPress={() => handleFetchEmpleado(item.id)}
+              onLongPress={() => handleConfirmation(item.id)}
+            />
+          )}
+        />
+      </SafeAreaView>
 
       <FAB
         color='white'

@@ -40,6 +40,7 @@ const NuevoEmpleado: React.FC<Props> = observer(({ navigation }) => {
       />
 
       <TextInput
+        keyboardType='phone-pad'
         label={EMPLOYEE_STRINGS.phoneLabel}
         placeholder={EMPLOYEE_STRINGS.phonePlaceholder}
         onChangeText={(texto) => store.setTelefono(texto)}
@@ -47,6 +48,7 @@ const NuevoEmpleado: React.FC<Props> = observer(({ navigation }) => {
       />
 
       <TextInput
+        keyboardType='email-address'
         label={EMPLOYEE_STRINGS.emailLabel}
         placeholder={EMPLOYEE_STRINGS.emailPlaceholder}
         onChangeText={(texto) => store.setCorreo(texto)}
