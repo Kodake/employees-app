@@ -10,6 +10,6 @@ export const styles = StyleSheet.create({
     },
     picker: {
         marginBottom: 10,
-        backgroundColor: 'transparent',
+        backgroundColor: '#2a9d8f',
     },
 });
