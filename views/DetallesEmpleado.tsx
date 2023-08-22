@@ -1,22 +1,24 @@
 import React from 'react';
-import { View, Alert } from 'react-native';
-import { Headline, Text, Subheading, Button, FAB } from 'react-native-paper';
+import {View, Alert} from 'react-native';
+import {Headline, Text, Subheading, Button, FAB} from 'react-native-paper';
 import globalStyles from '../styles/global';
-import { styles } from '../styles/DetallesEmpleadoStyles';
+import {styles} from '../styles/DetallesEmpleadoStyles';
 import store from '../store/sharedStateStore';
-import { Props } from '../interfaces/appInterfaces';
-import { EMPLOYEE_STRINGS, CONFIRMATION_MESSAGES } from '../messages/appMessages';
+import {Props} from '../interfaces/appInterfaces';
+import {EMPLOYEE_STRINGS, CONFIRMATION_MESSAGES} from '../messages/appMessages';
 import moment from 'moment';
 
-const DetallesEmpleado: React.FC<Props> = ({ navigation }) => {
-
+const DetallesEmpleado: React.FC<Props> = ({navigation}) => {
   const handleConfirmation = () => {
     Alert.alert(
       CONFIRMATION_MESSAGES.deleteConfirmation,
       CONFIRMATION_MESSAGES.deleteConfirmationDescription,
       [
-        { text: CONFIRMATION_MESSAGES.deleteConfirmationYes, onPress: () => handleDeleteEmployee(store.empleadoById?.id) },
-        { text: CONFIRMATION_MESSAGES.deleteConfirmationCancel, style: 'cancel' },
+        {
+          text: CONFIRMATION_MESSAGES.deleteConfirmationYes,
+          onPress: () => handleDeleteEmployee(store.empleadoById?.id),
+        },
+        {text: CONFIRMATION_MESSAGES.deleteConfirmationCancel, style: 'cancel'},
       ],
     );
   };
@@ -37,18 +39,29 @@ const DetallesEmpleado: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={globalStyles.contenedor}>
-      <Headline style={globalStyles.titulo}>{store.empleadoById?.nombre}</Headline>
+      <Headline style={globalStyles.titulo}>
+        {store.empleadoById?.nombre}
+      </Headline>
       <Text style={styles.texto}>
-        {EMPLOYEE_STRINGS.positionLabel}: <Subheading>{store.empleadoById?.posicion}</Subheading>
+        {EMPLOYEE_STRINGS.positionLabel}:{' '}
+        <Subheading>{store.empleadoById?.posicion}</Subheading>
       </Text>
       <Text style={styles.texto}>
-        {EMPLOYEE_STRINGS.emailLabel}: <Subheading>{store.empleadoById?.correo}</Subheading>
+        {EMPLOYEE_STRINGS.emailLabel}:{' '}
+        <Subheading>{store.empleadoById?.correo}</Subheading>
       </Text>
       <Text style={styles.texto}>
-        {EMPLOYEE_STRINGS.phoneLabel}: <Subheading>{store.empleadoById?.telefono}</Subheading>
+        {EMPLOYEE_STRINGS.phoneLabel}:{' '}
+        <Subheading>{store.empleadoById?.telefono}</Subheading>
       </Text>
       <Text style={styles.texto}>
-        {EMPLOYEE_STRINGS.dateLabel}: <Subheading>{store.empleadoById?.fecha.toString()}</Subheading>
+        {EMPLOYEE_STRINGS.dateLabel}:{' '}
+        <Subheading>
+          {moment(
+            store.empleadoById?.fecha,
+            'dddd, MMM DD YYYY HH:mm:ss ZZ',
+          ).format('YYYY/MM/DD')}
+        </Subheading>
       </Text>
 
       <Button
@@ -60,7 +73,7 @@ const DetallesEmpleado: React.FC<Props> = ({ navigation }) => {
       </Button>
 
       <FAB
-        color='white'
+        color="white"
         icon="pencil"
         style={globalStyles.fab}
         onPress={() => handleFetchEmpleado(store.empleadoById?.id)}
